@@ -1,9 +1,12 @@
-require('dotenv').config()
-const express = require('express');
+import express from 'express' ;
 
-const { dbConnection } = require('./dbConnection');
+import dotenv from 'dotenv'
+dotenv.config()
+import errorMiddleware from "./middlewares/error"
+
+import { dbConnection } from './dbConnection';
 //call the router
-const expressApp = require('./express-app');
+import expressApp from './express-app';
 
 const StartServer = async () => {
     const app = express()
@@ -14,7 +17,10 @@ const StartServer = async () => {
     const online = false
     
     var server;
-    var serverType;
+
+    type serverTypes = 'Http' | 'Https';
+    let serverType: serverTypes
+    
     if (!online){
         server = require('http').createServer(app)
         serverType = 'Http'
@@ -25,9 +31,12 @@ const StartServer = async () => {
 
     server.listen(process.env.PORT, () => {
         console.log(`server ${serverType} is working on port: ${process.env.PORT}, Processing service ${process.env.SERVICE_NAME}`);
-    }).on('error', (err) => {
-        console.log(`server port ${process.env.PORT} error`, err.message);
     })
+    // .on('error', (err: Error) => {
+    //     console.log(`server port ${process.env.PORT} error`, err.message);
+    // })
+    app.use(errorMiddleware);
+
 }
 
 StartServer()

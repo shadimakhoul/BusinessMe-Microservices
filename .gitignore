@@ -2,3 +2,10 @@
 **/.env
 **/.DS_Store
 **/node_modules
+# IDE/Editor files
+.vscode/
+.idea/
+
+# Compiled output
+**/*.js
+**/*.js.map
