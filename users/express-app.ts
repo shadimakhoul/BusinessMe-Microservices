@@ -3,13 +3,15 @@ import { Express } from 'express';
 import bodyParser from  'body-parser';
 import cors from 'cors';
 import router from  './routes/router';
-import errorMiddleware from "./middlewares/error";
+import errorMiddleware from "./middlewares/error"
 
 const expressApp = async (app: Express) => {
     app.use(bodyParser.json())
-    app.use(express.urlencoded({ extended: true }))
+    app.use(express.urlencoded({ extended: false }))
     app.use(cors())
-    app.use('/', router)
+    app.disable('etag');
+    app.use('/api', router)    
+    app.use(errorMiddleware);
 }
 
 export default expressApp;

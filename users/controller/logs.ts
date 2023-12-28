@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { createUser } from "../dbConnection/repository/user-repo"
-import { User } from '../global-interfaces/user';
-import { badRequest, somethingWentWrong, userCreatedSuccessfully } from '../instance';
+import { TokenPair, User } from '../global-interfaces/user';
+import { NotValidData, badRequest, somethingWentWrong, userCreatedSuccessfully } from '../instance';
 import { ErrorHandler } from '../utils/errorHandler';
+import { createTokens } from '../utils/auth';
+import { generateSecurePassword } from '../utils/crypto';
 
 const signup = async (req: Request, res: Response, next: NextFunction) => {      
     let user: User = req?.body    
@@ -12,20 +14,27 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
         || user.email == undefined 
         || user.password == undefined 
         || user.accountType == undefined
+        || user.phoneNumber == undefined
         ){
-            return res.status(400).json({
-                success: false,
-                message: badRequest
-        })
+            return next(new ErrorHandler(badRequest, 500)) 
     }
+
+    let {hashedPassword, salt} = await generateSecurePassword(user.password)
+    user.password = hashedPassword
+    user.salt = salt
 
     const newUser = await createUser(user)
-    console.log(newUser);
-
-    if (newUser) {
-        return next(new ErrorHandler("NotValidData", 400));
+    
+    if (!newUser){
+        return next(new ErrorHandler(somethingWentWrong, 400)) 
     }
-
+    
+    let tokens = await createTokens(newUser)
+    
+    if(!tokens){
+        return next(new ErrorHandler(somethingWentWrong, 500))
+    }
+    
     return res.status(201).json({
         success: true,
         message: userCreatedSuccessfully

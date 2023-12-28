@@ -1,16 +1,13 @@
 import { User } from "../../global-interfaces/user";
 import { UserModel } from "../models/index"
 
-async function createUser(user: User) {
-    const newUser = new UserModel(user)
-
-    console.log(newUser);
-    
+function createUser(user: User) {
+    const newUser = new UserModel(user)       
     return newUser.save()
 } 
 
-async function getUsers() {
-    return await UserModel.find()
+function getUsers() {
+    return UserModel.find()
 }
 
 function getUser(id: string) {

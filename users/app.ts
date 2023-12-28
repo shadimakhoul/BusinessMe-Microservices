@@ -1,4 +1,4 @@
-import express from 'express' ;
+import express, { Express } from 'express' ;
 
 import dotenv from 'dotenv'
 dotenv.config()
@@ -8,8 +8,8 @@ import { dbConnection } from './dbConnection';
 //call the router
 import expressApp from './express-app';
 
+const app: Express = express()
 const StartServer = async () => {
-    const app = express()
     
     await dbConnection()
     await expressApp(app)//init app server
@@ -29,12 +29,13 @@ const StartServer = async () => {
         serverType = 'Https'
     }
 
+
     server.listen(process.env.PORT, () => {
         console.log(`server ${serverType} is working on port: ${process.env.PORT}, Processing service ${process.env.SERVICE_NAME}`);
     })
-    // .on('error', (err: Error) => {
-    //     console.log(`server port ${process.env.PORT} error`, err.message);
-    // })
+    .on('error', (err: Error) => {
+        console.log(`server port ${process.env.PORT} error`, err.message);
+    })
     app.use(errorMiddleware);
 
 }

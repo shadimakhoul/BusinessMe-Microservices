@@ -1,45 +1,57 @@
 import mongoose, { Schema } from 'mongoose'
+import { accessStatuss, accessTypes } from '../../instance';
+import { User } from '../../global-interfaces/user';
 
-interface UserModel extends mongoose.Document {
-    username: string,
-    email: string,
-    password: string,
-    accountType: boolean,
-    created_at: Date,
-    updated_at: Date,
-}
 
-const UserSchema: Schema<UserModel> = new mongoose.Schema<UserModel>({
+const UserSchema: Schema<User> = new Schema<User>({
     username: {
         type: String,
         unique: true, 
-        lowercase: true
+        lowercase: true,
+        required: true,
     },
     email: {
         type: String, 
-        unique: true, 
         lowercase: true,
+        required: true,
+        unique: true, 
         validate: {
             validator: async function (value: String){
-                const UserModel = mongoose.model<UserModel>('User', UserSchema); 
-                if (value.length < 4){
-                    return false
-                }
-
-                const user = await UserModel.findOne({email: value})
-                if (user){
-                    return false
-                }
-                return true
+                const re = /^\S+@\S+\.\S+$/;
+                return re.test(String(value).toLowerCase());
             }
         }
     },
-    password: String,
-    accountType: Boolean,
+    phoneNumber: {
+        type: String,
+        required: true,
+        unique: true, 
+        validate: {
+            validator: async function (value: String){
+                const re = /^\+\d{1,3}\d{3,14}$/;
+                return re.test(String(value));
+            }
+        }
+    },
+    password: {type: String, required: true},
+    salt: {type: String, required: true},
+    accountType: {
+        type: String,
+        enum: Object.values(accessTypes),
+        required: true,
+        default: accessTypes.User
+    },
+    accountStatus: {
+        type: String,
+        enum: Object.values(accessStatuss),
+        required: true,
+        default: accessStatuss.Valid
+    },
+    lastLogin: Date,
     created_at: Date,
     updated_at: Date,
 }, {timestamps: true})
 
-const UserModel = mongoose.model<UserModel>('User', UserSchema);
+const UserModel = mongoose.model<User>('User', UserSchema);
 
 export default UserModel;
