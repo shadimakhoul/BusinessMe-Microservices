@@ -1,6 +1,6 @@
  import jwt from 'jsonwebtoken';
 import { TokenPair, User } from '../global-interfaces/user';
-import { UnknownError, accessToken, refreshToken, tokenTypes } from '../instance';
+import { AccessToken, RefreshToken, UnknownError, tokenTypes } from '../instance';
 
 const createTokens = async (payload: User, expirationIn?: string): Promise<TokenPair | false> => {
     try {
@@ -13,7 +13,7 @@ const createTokens = async (payload: User, expirationIn?: string): Promise<Token
         }
 
         const accessToken = jwt.sign({ user: payload }, jwtAccessSecret, { expiresIn: expirationIn || "10m"})
-        const refreshToken = jwt.sign({ user: payload }, jwtRefreshSecret, { expiresIn: expirationIn || "10m"})
+        const refreshToken = jwt.sign({ user: payload }, jwtRefreshSecret, { expiresIn: expirationIn || "1d"})
         
         return {accessToken, refreshToken}
 
@@ -26,9 +26,9 @@ const createTokens = async (payload: User, expirationIn?: string): Promise<Token
 const verifyToken = async (token: string, tokenType: tokenTypes): Promise<User | false> => {
     try {
         var jwtSecret: string | undefined
-        if (tokenType === accessToken){
+        if (tokenType === AccessToken){
             jwtSecret = process.env.JWT_ACCESS_SECRET_KEY
-        }else if (tokenType === refreshToken){
+        }else if (tokenType === RefreshToken){
             jwtSecret = process.env.JWT_REFRESH_SECRET_KEY
         }else{
             jwtSecret = undefined

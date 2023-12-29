@@ -14,9 +14,9 @@ enum accessStatuss{
     Blocked = "Blocked"
 }
 
-type tokenTypes = "Access" | "Refresh"
-let accessToken: tokenTypes = "Access"
-let refreshToken: tokenTypes = "Refresh"
+type tokenTypes = "AccessToken" | "RefreshToken"
+let AccessToken: tokenTypes = "AccessToken"
+let RefreshToken: tokenTypes = "RefreshToken"
 
 export {
     userCreatedSuccessfully,
@@ -26,7 +26,7 @@ export {
     accessTypes,
     accessStatuss,
     tokenTypes,
-    accessToken,
-    refreshToken,
+    AccessToken,
+    RefreshToken,
     UnknownError,
 }

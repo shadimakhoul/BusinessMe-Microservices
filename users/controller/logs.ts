@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { createUser } from "../dbConnection/repository/user-repo"
 import { TokenPair, User } from '../global-interfaces/user';
-import { NotValidData, badRequest, somethingWentWrong, userCreatedSuccessfully } from '../instance';
+import { NotValidData, AccessToken, badRequest, RefreshToken, somethingWentWrong, userCreatedSuccessfully } from '../instance';
 import { ErrorHandler } from '../utils/errorHandler';
 import { createTokens } from '../utils/auth';
 import { generateSecurePassword } from '../utils/crypto';
@@ -34,6 +34,12 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
     if(!tokens){
         return next(new ErrorHandler(somethingWentWrong, 500))
     }
+
+    let accessToken = tokens.accessToken
+    let refreshToken = tokens.refreshToken
+
+    res.cookie(AccessToken, {accessToken}, {httpOnly: true})
+    res.cookie(RefreshToken, {refreshToken}, {httpOnly: true})
     
     return res.status(201).json({
         success: true,

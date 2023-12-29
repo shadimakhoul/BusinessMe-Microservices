@@ -11,13 +11,7 @@ const dbConnection = async () => {
         
         console.log("DB Connected");
     } catch (error) {
-        if (error instanceof Error) {
-            // Here, 'error' is recognized as an instance of the 'Error' class, so 'message' is accessible
-            console.log("DB Error1", error.message);
-        } else {
-            // If 'error' is not an instance of 'Error', log the error object for further inspection
-            console.log("DB Error1", error);
-        }
+        error instanceof Error ? console.log("DB Error1", error.message) : console.log("DB Error1", error);
     }
 }
 

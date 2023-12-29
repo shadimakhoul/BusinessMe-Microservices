@@ -1,4 +1,4 @@
-import { accessStatuss, accessToken, accessTypes } from "../instance";
+import { accessStatuss, accessTypes } from "../instance";
 
 export interface User {
     username: string,
