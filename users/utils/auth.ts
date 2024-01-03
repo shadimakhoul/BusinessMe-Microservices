@@ -15,6 +15,10 @@ const createTokens = async (payload: User, expirationIn?: string): Promise<Token
         const accessToken = jwt.sign({ user: payload }, jwtAccessSecret, { expiresIn: expirationIn || "10m"})
         const refreshToken = jwt.sign({ user: payload }, jwtRefreshSecret, { expiresIn: expirationIn || "1d"})
         
+        if(!accessToken || !refreshToken){
+            throw new Error('Something went wrong!');
+        }
+
         return {accessToken, refreshToken}
 
     } catch (error) {

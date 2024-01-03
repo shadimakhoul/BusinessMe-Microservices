@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 
-const dbConnection = async () => {
+const dbConnection = async (): Promise<void> => {
     try {
         const DatabaseUrl = `mongodb+srv://${process.env.MongoDBUsername}:${process.env.MongoDBPassword}@cluster0.x8qewhr.mongodb.net/`
         const DatabaseOptions = {
