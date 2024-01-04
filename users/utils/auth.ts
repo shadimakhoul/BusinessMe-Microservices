@@ -2,18 +2,19 @@
 import { TokenPair, User } from '../global-interfaces/user';
 import { AccessToken, RefreshToken, UnknownError, tokenTypes } from '../instance';
 
-const createTokens = async (payload: User, expirationIn?: string): Promise<TokenPair | false> => {
+const createTokens = async (payload: User, AccessExpirationIn?: string, RefreshExpirationIn?: string): Promise<TokenPair | false> => {
     try {
         // check token type
         let jwtAccessSecret = process.env.JWT_ACCESS_SECRET_KEY
         let jwtRefreshSecret = process.env.JWT_REFRESH_SECRET_KEY
 
+        
         if (!jwtAccessSecret || !jwtRefreshSecret) {
             throw new Error('JWT secret key is not defined.');
         }
 
-        const accessToken = jwt.sign({ user: payload }, jwtAccessSecret, { expiresIn: expirationIn || "10m"})
-        const refreshToken = jwt.sign({ user: payload }, jwtRefreshSecret, { expiresIn: expirationIn || "1d"})
+        const accessToken = jwt.sign({ user: payload }, jwtAccessSecret, { expiresIn: AccessExpirationIn || "10m"})
+        const refreshToken = jwt.sign({ user: payload }, jwtRefreshSecret, { expiresIn: RefreshExpirationIn || "1d"})
         
         if(!accessToken || !refreshToken){
             throw new Error('Something went wrong!');
@@ -34,10 +35,8 @@ const verifyToken = async (token: string, tokenType: tokenTypes): Promise<User |
             jwtSecret = process.env.JWT_ACCESS_SECRET_KEY
         }else if (tokenType === RefreshToken){
             jwtSecret = process.env.JWT_REFRESH_SECRET_KEY
-        }else{
-            jwtSecret = undefined
         }
-
+        
         if (!jwtSecret) {
             throw new Error('JWT secret key is not defined.');
         }
