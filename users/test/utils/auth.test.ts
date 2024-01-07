@@ -41,7 +41,6 @@ describe('createTokens', () => {
     expect(jwt.sign).toHaveBeenCalledWith({ user: mockPayload }, 'refreshSecret', { expiresIn: '1d' });
   });
 
-  // Add more test cases to cover other scenarios (e.g., missing secrets, errors, etc.)
 });
 
 describe('verifyToken', () => {
@@ -65,7 +64,6 @@ describe('verifyToken', () => {
     expect(jwt.verify).toHaveBeenCalledWith(mockToken, 'accessSecret');
   });
 
-  // Add more test cases to cover other scenarios (e.g., invalid tokens, missing secrets, errors, etc.)
 });
 
 
@@ -80,7 +78,6 @@ describe('createTokens Errors', () => {
 
 describe('verifyTokens Errors', () => {
   const mockToken = 'mockToken';
-  const mockDecodedToken = { userId: '123', username: 'testuser' };
   it('should handle errors in token verify', async () =>{
     const token = await verifyToken(mockToken, AccessToken)
     expect(token).toBe(false)
