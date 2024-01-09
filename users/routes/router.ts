@@ -6,9 +6,7 @@ import catchAsyncError from "../middlewares/catchAsyncError"
 const router: Router = Router()
 
 
-router.get("/", catchAsyncError( async (req: Request, res: Response, next: NextFunction) => {
-    console.log(12);
-    
+router.get("/", catchAsyncError( async (req: Request, res: Response, next: NextFunction) => {    
     return res.send('Hi, Main Microservice is working');
 }))
 

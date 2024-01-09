@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import { createUser } from "../dbConnection/repository/user-repo"
-import { TokenPair, User } from '../global-interfaces/user';
-import { NotValidData, AccessToken, badRequest, RefreshToken, somethingWentWrong, userCreatedSuccessfully } from '../instance';
+import { User } from '../global-interfaces/user';
+import { AccessToken, badRequest, RefreshToken, somethingWentWrong, userCreatedSuccessfully } from '../instance';
 import { ErrorHandler } from '../utils/errorHandler';
 import { createTokens } from '../utils/auth';
 import { generateSecurePassword } from '../utils/crypto';
 
 const signup = async (req: Request, res: Response, next: NextFunction) => {      
-    let user: User = req?.body    
+    let user: User = req?.body
     if (
         !user 
         || user.username == undefined 
@@ -17,7 +17,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
         || user.phoneNumber == undefined
         ){
             return next(new ErrorHandler(badRequest, 500)) 
-    }
+        }
 
     let {hashedPassword, salt} = await generateSecurePassword(user.password)
     user.password = hashedPassword

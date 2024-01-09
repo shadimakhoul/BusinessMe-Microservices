@@ -11,7 +11,7 @@ const dbConnection = async (): Promise<void> => {
         
         console.log("DB Connected");
     } catch (error) {
-        error instanceof Error ? console.log("DB Error1", error.message) : console.log("DB Error1", error);
+        error instanceof Error ? console.log("DB Error", error.message) : console.log("DB Error", error);
     }
 }
 

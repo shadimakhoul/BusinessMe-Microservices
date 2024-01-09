@@ -30,15 +30,16 @@ const StartServer = async () => {
     }
 
 
-    server.listen(process.env.PORT, () => {
+    return server.listen(process.env.PORT, () => {
         console.log(`server ${serverType} is working on port: ${process.env.PORT}, Processing service ${process.env.SERVICE_NAME}`);
     })
     .on('error', (err: Error) => {
         console.log(`server port ${process.env.PORT} error`, err.message);
     })
-    app.use(errorMiddleware);
 
 }
 
 StartServer()
+
+export default StartServer;
 

@@ -4,7 +4,7 @@ function createTestUser(): User {
     return {
       username: 'example',
       email: 'example@example.com',
-      phoneNumber: '1234567890',
+      phoneNumber: '+971551166067',
       password: 'password',
       salt: 'somesalt',
       accountType: accessTypes.User,
