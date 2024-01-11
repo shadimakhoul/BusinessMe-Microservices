@@ -1,10 +1,10 @@
 import { User } from "../global-interfaces/user"
 import { accessStatuss, accessTypes } from "../instance";
-function createTestUser(): User {
+function createTestUser(): User{
     return {
       username: 'example',
-      email: 'example@example.com',
-      phoneNumber: '+971551166067',
+      email: 'example@example1.com',
+      phoneNumber: '+9715511660',
       password: 'password',
       salt: 'somesalt',
       accountType: accessTypes.User,

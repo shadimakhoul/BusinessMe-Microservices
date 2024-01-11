@@ -6,7 +6,7 @@ import { ErrorHandler } from '../utils/errorHandler';
 import { createTokens } from '../utils/auth';
 import { generateSecurePassword } from '../utils/crypto';
 
-const signup = async (req: Request, res: Response, next: NextFunction) => {      
+const signup = async (req: Request, res: Response, next: NextFunction) => {
     let user: User = req?.body
     if (
         !user 
@@ -16,7 +16,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
         || user.accountType == undefined
         || user.phoneNumber == undefined
         ){
-            return next(new ErrorHandler(badRequest, 500)) 
+            return next(new ErrorHandler(badRequest, 400)) 
         }
 
     let {hashedPassword, salt} = await generateSecurePassword(user.password)
@@ -26,7 +26,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
     const newUser = await createUser(user)
     
     if (!newUser){
-        return next(new ErrorHandler(somethingWentWrong, 400)) 
+        return next(new ErrorHandler(somethingWentWrong, 500)) 
     }
     
     let tokens = await createTokens(newUser)

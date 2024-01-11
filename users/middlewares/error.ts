@@ -16,7 +16,6 @@ type CustomError = {
 export default (err: CustomError, req: Request, res: Response, next: NextFunction) => {
   err.statusCode = err.statusCode || 500;
   err.message = err.message || "Internal Server Error1";
-  console.log("stage 3");
   
   // Wrong Mongodb Id error
   if (err.name === "CastError") {
@@ -32,7 +31,7 @@ export default (err: CustomError, req: Request, res: Response, next: NextFunctio
   // Mongoose duplicate key error
   if (err.code === 11000) {
     const message = `Duplicate ${Object.keys(err.keyValue)} entered`;    
-    err = new ErrorHandler(message, 400);
+    err = new ErrorHandler(message, 409);
   }
 
   // Wrong JWT error
